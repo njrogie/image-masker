@@ -1,12 +1,33 @@
 package imagemasker
 
 import (
-	"fmt"
 	"image"
+	"image/color"
 	"image/png"
 	"log"
 	"os"
 )
+
+/* 	This function finds the first instance where one image is a
+complete subset of another */
+func findAbsoluteMatch(origImageFilename string, maskImageFilename string) (xPos int, yPos int, width int, length int) {
+	origImg := getImage(origImageFilename)
+	maskImage := getImage(maskImageFilename)
+
+	// Grab the top-left pixel of the mask image
+	maskPix := maskImage.At(0, 0)
+
+	for i := 0; i < origImg.Bounds().Dx(); i++ {
+		for j := 0; j < origImg.Bounds().Dy(); j++ {
+			// Find the first instance of exact same color
+			if origImg.At(i, j) == maskPix {
+				//maskPix = maskImage.At
+			}
+		}
+	}
+	log.Fatalf("Function not complete.")
+	return 0, 0, 0, 0
+}
 
 // reusable func for getting an image from a .png file
 func getImage(filename string) image.Image {
@@ -24,13 +45,22 @@ func getImage(filename string) image.Image {
 	return img
 }
 
-func findAbsoluteMatch(origImage string, maskImage string) {
-	fmt.Println(getImage(origImage).Bounds().Max)
-	fmt.Println(getImage(maskImage).Bounds().Max)
+func incrementPixelInImage(entireImage image.Image, posX *int, posY *int) {
+	// Move the pixel up by one
+	maxX := entireImage.Bounds().Dx()
+	maxY := entireImage.Bounds().Dy()
+
+	if *posX < maxX {
+		*posX++
+	} else if *posY < maxY {
+		*posY++
+	} else {
+		*posX = maxX
+		*posY = maxY
+	}
 }
 
-func main() {
-	//subjectFile := os.Args[1]
-	//maskFile := os.Args[2]
-
+func resetPixelCoords(posX *int, posY *int) {
+	*posX = 0
+	*posY = 0
 }
